@@ -6,7 +6,6 @@ import com.example.springbootwebtutuorial.repositories.EmployeeRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +25,7 @@ public class EmployeeService {
         return modelMapper.map(employeeEntity,EmployeeDTO.class);
     }
 
-    public List<EmployeeDTO> getAllEmployee() {
+    public List<EmployeeDTO> getAllEmployee(Integer age, String sortBy) {
         List<EmployeeEntity> employeeEntities = employeeRepository.findAll();
         return employeeEntities
                 .stream()
