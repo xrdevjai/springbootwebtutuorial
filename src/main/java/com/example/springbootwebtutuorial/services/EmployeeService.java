@@ -2,6 +2,7 @@ package com.example.springbootwebtutuorial.services;
 
 import com.example.springbootwebtutuorial.dto.EmployeeDTO;
 import com.example.springbootwebtutuorial.entities.EmployeeEntity;
+import com.example.springbootwebtutuorial.exception.ResourceNotFound;
 import com.example.springbootwebtutuorial.repositories.EmployeeRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +46,8 @@ public class EmployeeService {
     }
 
     public EmployeeDTO UpdateEmployeeById(Long employeeId, EmployeeDTO employeeDTO) {
+        boolean exists = isExistsByEmployeeId(employeeId);
+        if (!exists) throw new ResourceNotFound("Employee Not found with id: "+ employeeId);
         EmployeeEntity employeeEntity = modelMapper.map(employeeDTO,EmployeeEntity.class);
         employeeEntity.setId(employeeId);
         EmployeeEntity savedEmployeeEntity = employeeRepository.save(employeeEntity);

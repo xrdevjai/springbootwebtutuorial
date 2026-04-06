@@ -1,6 +1,7 @@
 package com.example.springbootwebtutuorial.controllers;
 
 import com.example.springbootwebtutuorial.dto.EmployeeDTO;
+import com.example.springbootwebtutuorial.exception.ResourceNotFound;
 import com.example.springbootwebtutuorial.services.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -28,8 +30,9 @@ public class EmployeeController {
         Optional<EmployeeDTO> employeeDTO =  employeeService.getEmployeeById(id);
         return employeeDTO
                 .map(employeeDTO1 -> ResponseEntity.ok(employeeDTO))
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFound("Employee Not Found with id: "+id));
     }
+
     @GetMapping //http://localhost:8080/employees?age=21&sortBy=jai
     public ResponseEntity<List<EmployeeDTO>> getAllEmployee(@RequestParam(required = false) Integer age,
                                                @RequestParam(required = false) String sortBy){
